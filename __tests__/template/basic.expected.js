@@ -24,4 +24,9 @@ const LoadingSkeleton = styled(View)`
 	margin-bottom: ${props => props.mb || 0};
 `;
 
+const SimpleDiv = styled.div`
+	top: 10px;
+	right: 5px;
+`;
+
 export default LoadingSkeleton;

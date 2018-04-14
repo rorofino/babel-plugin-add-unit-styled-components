@@ -47,7 +47,12 @@ describe('testing the plugin with an styled-component component', () => {
 	test('should update all properties', () => {
 		const tplName = "complete";
 		const ret = runPlugin(tplName);
-		console.log(ret.code);
+		expect(ret.code).toEqual(ret.expected);
+	});
+
+	test('it should add px for extend helper', () => {
+		const tplName = "extend";
+		const ret = runPlugin(tplName);
 		expect(ret.code).toEqual(ret.expected);
 	});
 });
