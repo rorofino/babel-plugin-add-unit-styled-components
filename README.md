@@ -10,17 +10,17 @@ Install the plugin first:
 npm install --save-dev babel-plugin-add-unit-styled-components
 ```
 
-Then add it to your babel configuration:
+Then add it to your babel configuration as the `FIRST` plugin:
 
 ```JSON
 {
-  "plugins": [["babel-plugin-add-unit-styled-components", { unit: 'px' }]]
+	"plugins": [["babel-plugin-add-unit-styled-components", {unit: "px"}]]
 }
 ```
 
 ## Contributing
 
-Pull Request are welcome ;)
+Pull Requests are welcome ;)
 
 ## License
 

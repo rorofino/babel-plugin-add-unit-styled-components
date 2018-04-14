@@ -7,26 +7,47 @@ const myPlugin = require('../src');
 
 let babelConfig = {
 	presets: ["react"],
-	plugins: [
-		[myPlugin],
-	],
 	compact: false
 }
 
+const runPlugin = (tplName, expectedName) => {
+	const templatePath = `${__dirname}/template/${tplName}.tpl.js`;
+	const expectedPath = `${__dirname}/template/${expectedName || tplName}.expected.js`;
+	const testCode = fs.readFileSync(templatePath, { encoding: 'utf-8' });
+	const r = babelCore.transform(testCode, babelConfig);
+	const transpiled = fs.readFileSync(expectedPath, { encoding: 'utf-8' });
+	return { code: r.code.trim(), expected: transpiled.trim() };
+}
+
 describe('testing the plugin with an styled-component component', () => {
-	test('should add px to props', () => {
-		const pathToRead = __dirname + '/template/componentToTranspile.js';
-		const testCode = fs.readFileSync(pathToRead, { encoding: 'utf-8' });
-		const r = babelCore.transform(testCode, babelConfig);
-		const transpiled = fs.readFileSync(__dirname + '/template/expectedTranspiledComponentPx.js', { encoding: 'utf-8' });
-		expect(transpiled.trim()).toEqual(r.code.trim());
+
+	beforeEach(() => {
+		babelConfig.plugins = [[myPlugin]]
 	});
+
+	test('should add px to props', () => {
+		const tplName = "basic";
+		const ret = runPlugin(tplName);
+		expect(ret.code).toEqual(ret.expected);
+	});
+
 	test('should add rem to props', () => {
-		babelConfig.plugins[0][1] = { unit: 'rem' };
-		const pathToRead = __dirname + '/template/componentToTranspile.js';
-		const testCode = fs.readFileSync(pathToRead, { encoding: 'utf-8' });
-		const r = babelCore.transform(testCode, babelConfig);
-		const transpiled = fs.readFileSync(__dirname + '/template/expectedTranspiledComponentRem.js', { encoding: 'utf-8' });
-		expect(transpiled.trim()).toEqual(r.code.trim());
+		babelConfig.plugins = [[myPlugin, { unit: 'rem' }]];
+		const tplName = "basic";
+		const ret = runPlugin(tplName, 'basic.rem');
+		expect(ret.code).toEqual(ret.expected);
+	});
+
+	test('should add px to flex shorthand property', () => {
+		const tplName = "flexShortHand";
+		const ret = runPlugin(tplName);
+		expect(ret.code).toEqual(ret.expected);
+	});
+
+	test('should update all properties', () => {
+		const tplName = "complete";
+		const ret = runPlugin(tplName);
+		console.log(ret.code);
+		expect(ret.code).toEqual(ret.expected);
 	});
 });

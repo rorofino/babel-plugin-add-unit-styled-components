@@ -4,15 +4,11 @@ const simpleNumberReplacementProps = require('../utils/propsToAdd');
 const isStyled = require('../utils/isStyled');
 
 const customFixers = {
-	// Add px to flex basis in flex shorthand
-	flex: value => value.replace(/((?:[\d.]+\s+){2}[\d.])$/, '$1px'),
-	// Quotes for family in font shorthand
-	font: value => value.replace(
-		/^(.*[\d.]+px\s?(?:\/\s*[\d.]+px\s*)?)([^"]*?)\s*$/,
-		(match, p1, p2) => `${p1}${JSON.stringify(p2)}`
-	),
-	// Quotes for font-family
-	fontfamily: value => (/^".*"$/.test(value) ? value : JSON.stringify(value)),
+	// Add unit to flex basis in flex shorthand
+	flex: function(value, unit) {
+		const regex = /((?:[\d.]+\s+){2}\d*)(?!\d|\.|[Ee]|px|substitution|r?em|%)/;
+		return value.replace(regex, `$1${unit}`);
+	},
 };
 
 function addUnit(t, path, state) {
@@ -59,7 +55,7 @@ function addUnit(t, path, state) {
 			}
 			if (testProp in customFixers) {
 				const valueBefore = decl.value;
-				decl.value = customFixers[testProp](decl.value);
+				decl.value = customFixers[testProp](decl.value, unitToinsert);
 				if (decl.value !== valueBefore) {
 					propsChanged.push(testProp);
 				}
