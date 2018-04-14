@@ -17,6 +17,11 @@ Then add it to your babel configuration:
   "plugins": [["babel-plugin-add-unit-styled-components", { unit: 'px' }]]
 }
 ```
+
+## Contributing
+
+Pull Request are welcome ;)
+
 ## License
 
 Licensed under the MIT License, Copyright © 2018 Rodrigo Orofino.
