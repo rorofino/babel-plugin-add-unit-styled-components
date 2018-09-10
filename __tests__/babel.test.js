@@ -54,5 +54,11 @@ describe('testing the plugin with an styled-component component', () => {
 		const tplName = "extend";
 		const ret = runPlugin(tplName);
 		expect(ret.code).toEqual(ret.expected);
+  });
+
+  test('it should add px for margin-top and keep margin auto', () => {
+		const tplName = "margin";
+		const ret = runPlugin(tplName);
+		expect(ret.code).toEqual(ret.expected);
 	});
 });
