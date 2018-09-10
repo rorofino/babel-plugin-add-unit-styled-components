@@ -1,6 +1,7 @@
 const postcss = require('postcss');
 const addUnitToNumber = require('../utils/addUnitToNumber');
 const simpleNumberReplacementProps = require('../utils/propsToAdd');
+const isIgnoreValue = require('../utils/isIgnoreValue');
 
 const customFixers = {
 	// Add unit to flex basis in flex shorthand
@@ -47,7 +48,9 @@ function addUnit(t, path, state) {
 		const testProp = decl.prop.replace(/-/g, '').toLowerCase();
 		if (simpleNumberReplacementProps.find(x => testProp.match(x))) {
 			if (!replaceUnit.find(x => decl.value.indexOf(x) > -1) && !decl.value.match(/__\d+substitution__/g)) {
-				propsChanged.push(testProp);
+				if (!isIgnoreValue(decl.value)) {
+					propsChanged.push(testProp);
+				}
 				decl.value = addUnitToNumber(decl.value, unitToinsert);
 			}
 		}
